@@ -17,7 +17,7 @@ HEADERS = {
 
 win_percent_wasd = 52
 win_percent_dotaix = 60
-forecast_not_ready_plug = "Прогноз пока не готов"
+forecast_not_ready_plug = "Прогноз пока не готов, но выйдет в ближайшее время"
 
 
 def get_soup(url):
