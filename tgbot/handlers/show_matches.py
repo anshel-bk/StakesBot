@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher.filters import Text
 
 from tgbot.keyboards.reply import get_keyboard_choice_site_matches
-from tgbot.services.get_matches import get_matches_wasd, get_matches_dotaix
+from tgbot.services.get_matches import get_matches_wasd, get_matches_dotaix, text_formatting
 
 
 async def site_choice(message: types.Message):
@@ -18,18 +18,16 @@ async def site_choice(message: types.Message):
 
 async def show_info_about_matches_wasd(message: types.Message, state: FSMContext):
     info = get_matches_wasd()
-    result_text = []
-    for key,value in info.items():
-        result_text.append(f"{key} {value}")
-    await message.answer("\n".join(result_text))
+    if isinstance(info, str):
+        await message.answer(info)
+    await message.answer(text_formatting(info, 'wasd'))
 
 
 async def show_info_about_matches_dotaix(message: types.Message, state: FSMContext):
     info = get_matches_dotaix()
-    result_text = []
-    for key,value in info.items():
-        result_text.append(f"{key[0]} : {key[1]}\n{'  '*(len(key[0])-4)}{value[0][0]}% : {value[0][1]}%\n{'  '*(len(key[0])-4)}{value[1][0]}% : {value[1][1]}%")
-    await message.answer("\n".join(result_text))
+    if isinstance(info, str):
+        await message.answer(info)
+    await message.answer(text_formatting(info, 'dotaix'))
 
 
 async def cmd_cancel(message: types.Message, state: FSMContext):
