@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import json
 
 URL_WASD = "https://wasdparty.com/"
-URL_DOTAIX = "https://dotaix.xyz/api/matches?live=false"
+URL_DOTAIX = "https://dotaix.xyz/api/matches?live=true"
 
 HEADERS = {
     "Accept": "/*/",
@@ -45,7 +45,7 @@ def get_matches_wasd(url: str = URL_WASD) -> dict | str:
                 wasd_info[tuple([name_success_team, name_sucking_team])] = tuple(
                     [percent_success_team, percent_sucking_team])
         except AttributeError:
-            continue
+            break
     return wasd_info if wasd_info else "На текущий момент прогнозов нет, воспользуйтесь ботом позже"
 
 

@@ -20,14 +20,16 @@ async def show_info_about_matches_wasd(message: types.Message, state: FSMContext
     info = get_matches_wasd()
     if isinstance(info, str):
         await message.answer(info)
-    await message.answer(text_formatting(info, 'wasd'))
+    elif isinstance(info,dict):
+        await message.answer(text_formatting(info, 'wasd'))
 
 
 async def show_info_about_matches_dotaix(message: types.Message, state: FSMContext):
     info = get_matches_dotaix()
     if isinstance(info, str):
         await message.answer(info)
-    await message.answer(text_formatting(info, 'dotaix'))
+    elif isinstance(info,dict):
+        await message.answer(text_formatting(info, 'dotaix'))
 
 
 async def cmd_cancel(message: types.Message, state: FSMContext):
