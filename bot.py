@@ -4,12 +4,12 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
-from commands import set_commands
+from commands_bot import set_commands
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
-from tgbot.handlers.echo import show_matches
+from tgbot.handlers.show_matches import show_matches
 from tgbot.handlers.user import register_user
 from tgbot.middlewares.db import DbMiddleware
 

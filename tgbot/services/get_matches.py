@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import json
 
 URL_WASD = "https://wasdparty.com/"
-URL_DOTAIX = "https://dotaix.xyz/api/matches?live=true"
+URL_DOTAIX = "https://dotaix.xyz/api/matches?live=false"
 
 HEADERS = {
     "Accept": "/*/",
@@ -21,14 +21,13 @@ forecast_not_ready_plug = "Прогноз пока не готов, но вый�
 
 
 def get_soup(url):
-    print(url)
     request = requests.get(url, headers=HEADERS)
     source = request.text
     soup = BeautifulSoup(source, "lxml")
     return soup
 
 
-def get_matches_wasd(url: str = URL_WASD) -> dict:
+def get_matches_wasd(url: str = URL_WASD) -> dict | str :
     soup = get_soup(url)
     wasd_info = {}
     teams = soup.find_all("div", class_="teams")
@@ -45,7 +44,7 @@ def get_matches_wasd(url: str = URL_WASD) -> dict:
                     [percent_success_team, percent_sucking_team])
         except AttributeError:
             continue
-    return wasd_info
+    return wasd_info if wasd_info else "На текущий момент прогнозов нет, воспользуйтесь ботом позже"
 
 
 def get_matches_dotaix(url: str = URL_DOTAIX) -> str | dict[tuple[Any, ...], tuple[Any, ...]]:
@@ -53,6 +52,8 @@ def get_matches_dotaix(url: str = URL_DOTAIX) -> str | dict[tuple[Any, ...], tup
     request = requests.get(url, headers=HEADERS)
     json_info = request.text
     json_info = json.loads(json_info)
+    if not json_info:
+        return "На текущий момент прогнозов нет, воспользуйтесь ботом позже"
     for dict in json_info:
         pick_power = dict.get("percentage").get("pick_power", forecast_not_ready_plug)
         pick_team_power = dict.get("percentage").get("pick_power_team_based", forecast_not_ready_plug)
@@ -64,7 +65,7 @@ def get_matches_dotaix(url: str = URL_DOTAIX) -> str | dict[tuple[Any, ...], tup
         numbers_percentage = [num for num in pick_power] + [num for num in pick_team_power]
         if any(map(lambda num: num > win_percent_dotaix, numbers_percentage)):
             dotaix_info[tuple([radiant_team_name, dire_team_name])] = tuple([pick_power, pick_team_power])
-        return dotaix_info if dotaix_info else "Нет подходящих матчей"
+    return dotaix_info if dotaix_info else "Нет подходящих матчей"
 
 
-print(get_matches_dotaix(URL_DOTAIX))
+
