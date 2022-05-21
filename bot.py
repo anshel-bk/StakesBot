@@ -4,11 +4,12 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
+from commands import set_commands
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
-from tgbot.handlers.echo import register_echo
+from tgbot.handlers.echo import show_matches
 from tgbot.handlers.user import register_user
 from tgbot.middlewares.db import DbMiddleware
 
@@ -26,8 +27,7 @@ def register_all_filters(dp):
 def register_all_handlers(dp):
     register_admin(dp)
     register_user(dp)
-
-    register_echo(dp)
+    show_matches(dp)
 
 
 async def main():
@@ -55,6 +55,7 @@ async def main():
         await dp.storage.close()
         await dp.storage.wait_closed()
         await bot.session.close()
+        await set_commands(bot)
 
 
 if __name__ == '__main__':
